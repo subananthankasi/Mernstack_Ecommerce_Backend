@@ -88,7 +88,7 @@
         "ratings": 5,
         "images": [
             {
-                "image": "/images/products/6.jpg"
+                "image": "/images/products/6.avif"
             }
         ],
         "category": "Headphones",
@@ -108,6 +108,51 @@
         ],
         "category": "Sports",
         "seller": "Ebay",
+        "stock": 6,
+        "numOfReviews": 9
+    },
+    {
+        "name": "Realme mobile 14 pro plus",
+        "price": 100.12,
+        "description": "The high raised back cover with extra padding.",
+        "ratings": 3,
+        "images": [
+            {
+                "image": "/images/products/8.jpg"
+            }
+        ],
+        "category": "Accessories",
+        "seller": "Amazon",
+        "stock": 6,
+        "numOfReviews": 9
+    },
+    {
+        "name": "Neckband realme product",
+        "price": 100.12,
+        "description": "The high raised back cover with extra padding.",
+        "ratings": 3,
+        "images": [
+            {
+                "image": "/images/products/9.jpg"
+            }
+        ],
+        "category": "Headphones",
+        "seller": "Amazon",
+        "stock": 6,
+        "numOfReviews": 9
+    },
+    {
+        "name": "Mens Tshirt",
+        "price": 10.12,
+        "description": "The high raised back cover with extra padding.",
+        "ratings": 3,
+        "images": [
+            {
+                "image": "/images/products/10.jpg"
+            }
+        ],
+        "category": "Accessories",
+        "seller": "Amazon",
         "stock": 6,
         "numOfReviews": 9
     }
