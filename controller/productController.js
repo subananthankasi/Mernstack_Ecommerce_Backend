@@ -30,7 +30,6 @@ exports.newProducts = catchAsyncError(async (req, res) => {
             product: product
         })
     } catch (err) {
-        console.log(err)
         res.status(404).json({
             success: "false",
             message: err.message

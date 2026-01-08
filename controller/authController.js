@@ -7,10 +7,15 @@ const sendToken = require('../utils/jwt')
 const crypto = require('crypto')
 // Register 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-    const { name, email, password, avatar } = req.body
+    const { name, email, password } = req.body
+    let avatar;
+    if (req.file) {
+        avatar = `${process.env.BACKEND_URL}/uploads/user/${req.file.originalname}`
+    }
     const user = await User.create({ name, email, password, avatar });
-    sendToken(user, 201, res)
+    sendToken(user, 200, res)
 })
+
 // Login 
 exports.loginUser = catchAsyncError(async (req, res, next) => {
     const { email, password } = req.body
@@ -27,17 +32,37 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
     sendToken(user, 201, res)
 })
 
+// exports.logoutUser = (req, res, next) => {
+//     res.cookie('token', null, {
+//         expires: new Date(Date.now()),
+//         httpOnly: true,
+//     })
+//         .status(200)
+//         .json({
+//             success: 'true',
+//             message: "logout successfully"
+//         })
+// }
 exports.logoutUser = (req, res, next) => {
-    res.cookie('token', null, {
-        expires: new Date(Date.now()),
-        httpOnly: true,
+  res
+    .set({
+      "Cache-Control": "no-store, no-cache, must-revalidate, private",
+      Pragma: "no-cache",
+      Expires: "0",
     })
-        .status(200)
-        .json({
-            success: 'true',
-            message: "logout successfully"
-        })
-}
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      sameSite: "lax",
+      secure: false, 
+    })
+    .status(200)
+    .json({
+      success: true,
+      message: "Logged out successfully",
+    });
+};
+
 // forgot password
 exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
@@ -46,7 +71,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     }
     const resetToken = await user.getResetToken();
     await user.save({ validateBeforeSave: false })
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/password/reset/${resetToken}`
+    const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`
 
     const message = `Your password reset link is follows \n\n
     ${resetUrl} \n\n
@@ -114,10 +139,16 @@ exports.changePassword = catchAsyncError(async (req, res, next) => {
 })
 // Update profile
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
-    const newUserData = {
+    let newUserData = {
         name: req.body.name,
         email: req.body.email
     }
+    let avatar;
+    if (req.file) {
+        avatar = `${process.env.BACKEND_URL}/uploads/user/${req.file.originalname}`
+        newUserData = {...newUserData, avatar: avatar }
+    }
+    console.log("newww", newUserData)
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
         runValidators: true

@@ -102,7 +102,6 @@ async function updateStock(productId, quantity) {
 exports.deleteOrder = catchAsyncError(async (req, res, next) => {
     const { id } = req.params
     const order = await Order.findByIdAndDelete(id)
-    console.log("order", order)
     if (!order) {
         return next(new ErrorHandler(`order not found with this id ${id}`, 404))
     }

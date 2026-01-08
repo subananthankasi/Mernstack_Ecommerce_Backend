@@ -27,22 +27,15 @@ class apiFeature {
     // };
    filter() {
     const queryObj = { ...this.queryStr }
-
     const removeFields = ['keyword', 'limit', 'page']
     removeFields.forEach(field => delete queryObj[field])
-
-    // 🔥 Build Mongo filter properly
     const mongoFilter = {}
-
     Object.keys(queryObj).forEach(key => {
         if (key.includes('[')) {
-            // price[gte] → price, gte
             const [field, operator] = key.replace(']', '').split('[')
-
             if (!mongoFilter[field]) {
                 mongoFilter[field] = {}
             }
-
             mongoFilter[field][`$${operator}`] = Number(queryObj[key])
         } else {
             mongoFilter[key] = queryObj[key]
